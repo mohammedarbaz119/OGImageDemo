@@ -1,13 +1,14 @@
 import { ArrowUp, ArrowDown, MessageSquare, Bell, User } from "lucide-react";
-import type { PostDataType } from "@/data";
+// import type { PostDataType } from "@/data";
+import {
+  ReactElement,
+  JSXElementConstructor,
+  ReactNode,
+  ReactPortal,
+  Key,
+} from "react";
 
-const RedditPost = ({
-  title,
-  author,
-  date,
-  content,
-  comments,
-}: PostDataType) => {
+const RedditPost = ({ title, author, date, content, comments }) => {
   return (
     <div className="min-h-screen bg-gray-200">
       {/* Reddit-like header */}
@@ -75,14 +76,41 @@ const RedditPost = ({
             <h3 className="text-lg font-semibold mb-4 text-gray-700">
               Comments
             </h3>
-            {comments?.map((comment, index) => (
-              <div key={index} className="bg-white p-3 rounded mb-3 shadow-sm">
-                <span className="font-semibold text-xs text-gray-500">
-                  u/{comment.author}
-                </span>
-                <p className="mt-1 text-sm">{comment.text}</p>
-              </div>
-            ))}
+            {comments?.map(
+              (
+                comment: {
+                  author:
+                    | string
+                    | number
+                    | boolean
+                    | ReactElement<any, string | JSXElementConstructor<any>>
+                    | Iterable<ReactNode>
+                    | ReactPortal
+                    | null
+                    | undefined;
+                  text:
+                    | string
+                    | number
+                    | boolean
+                    | ReactElement<any, string | JSXElementConstructor<any>>
+                    | Iterable<ReactNode>
+                    | ReactPortal
+                    | null
+                    | undefined;
+                },
+                index: Key | null | undefined
+              ) => (
+                <div
+                  key={index}
+                  className="bg-white p-3 rounded mb-3 shadow-sm"
+                >
+                  <span className="font-semibold text-xs text-gray-500">
+                    u/{comment.author}
+                  </span>
+                  <p className="mt-1 text-sm">{comment.text}</p>
+                </div>
+              )
+            )}
           </div>
         </div>
       </div>
