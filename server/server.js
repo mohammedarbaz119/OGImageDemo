@@ -174,10 +174,8 @@ try{
 
   const screenshotBuffer = await page.screenshot({path:__dirname+"/ab.png"});
   await browser.close();
-console.log("worke")
-
-
   res.setHeader('Content-Type', 'image/png');
+  console.log(screenshotBuffer)
   res.send(screenshotBuffer);
 
 }
