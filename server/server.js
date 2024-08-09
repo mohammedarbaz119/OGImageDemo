@@ -194,7 +194,7 @@ app.get('*', async(req, res) => {
     }
 
     const postId = req.path.split('/').pop();
-    const ogImageUrl = `http://localhost:3000/og-image/${postId}`;
+    const ogImageUrl = `https://ogimagedemo.onrender.com/og-image/${postId}`;
 
     let dynamicHtml = html.replace(
       '<meta property="og:image" content="https://www.wikihow.com/images/thumb/4/41/Get-the-URL-for-Pictures-Draft-Step-1.jpg/v4-728px-Get-the-URL-for-Pictures-Draft-Step-1.jpg" />',
