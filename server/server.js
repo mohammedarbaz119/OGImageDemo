@@ -13,6 +13,7 @@ app.use(express.static(path.join(__dirname,"..", 'dist')));
 
 app.get('/og-image/:id', async (req, res) => {
   const postId = req.params.id;
+  const imagePath = path.join(__dirname, `og-image-${postId}.png`);
 
   // Mock post data based on the ID
  
@@ -21,6 +22,10 @@ try{
 
   if (!post) {
     return res.status(404).send('Post not found');
+  }
+  if (fs.existsSync(imagePath)) {
+    // If it exists, send the saved image
+    return res.sendFile(imagePath);
   }
 
   // Render the React component to a string
@@ -163,7 +168,8 @@ try{
     .replace('Date Placeholder', post.date)
     .replace('Content Placeholder', post.content);
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']});
   const page = await browser.newPage();
 
   // Set the viewport to the size of the OG image
@@ -171,13 +177,13 @@ try{
 
   // Set the content of the page to the HTML string
   await page.setContent(htmlContent);
-
-  const screenshotBuffer = await page.screenshot({path:__dirname+"/ab.png"});
+console.log("runn")
+  const screenshotBuffer = await page.screenshot({path:imagePath});
   await browser.close();
-  res.setHeader('Content-Type', 'image/png');
-  console.log(screenshotBuffer)
-  res.send(screenshotBuffer);
-
+  // res.setHeader('Content-Type', 'image/png');
+  // res.setHeader('Content-Disposition', 'inline; filename="og-image.png"');
+  // res.send(screenshotBuffer);
+  res.sendFile(imagePath)
 }
 catch(e){
 console.log(e)
